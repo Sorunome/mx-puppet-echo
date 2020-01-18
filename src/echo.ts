@@ -3,7 +3,7 @@ import {
 	PuppetBridge,
 	IRemoteUser,
 	IReceiveParams,
-	IRemoteChan,
+	IRemoteRoom,
 	IMessageEvent,
 	IFileEvent,
 	Log,
@@ -36,7 +36,7 @@ export class Echo {
 		// needed to send a message, a file, reactions, ... to matrix
 		log.info(`Creating send params for ${ghostname}...`);
 		return {
-			chan: {
+			room: {
 				// this is usually the room ID of the remote protocol
 				// we just have DMs with the ghosts and user their names as ID
 				roomId: ghostname,
@@ -83,7 +83,7 @@ export class Echo {
 		delete this.puppets[puppetId]; // and finally delete our local copy
 	}
 
-	public async handleMatrixMessage(room: IRemoteChan, data: IMessageEvent, event: any) {
+	public async handleMatrixMessage(room: IRemoteRoom, data: IMessageEvent, event: any) {
 		// this is called every time we receive a message from matrix and need to
 		// forward it to the remote protocol.
 
@@ -102,7 +102,7 @@ export class Echo {
 		});
 	}
 
-	public async handleMatrixFile(room: IRemoteChan, data: IFileEvent, event: any) {
+	public async handleMatrixFile(room: IRemoteRoom, data: IFileEvent, event: any) {
 		// this is called every time we receive a file from matrix, as we enabled said feature
 
 		// first we check if the puppet exists
@@ -117,18 +117,18 @@ export class Echo {
 		await this.puppet.sendFileDetect(params, data.url, data.filename);
 	}
 
-	public async createChan(chan: IRemoteChan): Promise<IRemoteChan | null> {
-		// this is called when the puppet bridge wants to create a new channel
+	public async createRoom(room: IRemoteRoom): Promise<IRemoteRoom | null> {
+		// this is called when the puppet bridge wants to create a new room
 		// we need to validate that the corresponding roomId exists and, if not return null
 
 		// first we check if the puppet exists
-		const p = this.puppets[chan.puppetId];
+		const p = this.puppets[room.puppetId];
 		if (!p) {
 			return null;
 		}
 		// what we need to return is the same filled out information as in getSendParams
 		// as our userIds are the same as our roomIds, let's just do that
-		return this.getSendParams(chan.puppetId, chan.roomId).chan;
+		return this.getSendParams(room.puppetId, room.roomId).room;
 	}
 
 	public async getDmRoomId(user: IRemoteUser): Promise<string | null> {

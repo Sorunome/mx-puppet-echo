@@ -90,8 +90,8 @@ async function run() {
 	puppet.on("message", echo.handleMatrixMessage.bind(echo));
 	// optional (since we enabled it in features): listen to files received from matrix
 	puppet.on("file", echo.handleMatrixFile.bind(echo));
-	// optional: create channel hook (needed for initiating DMs on matrix)
-	puppet.setCreateChanHook(echo.createChan.bind(echo));
+	// optional: create room hook (needed for initiating DMs on matrix)
+	puppet.setCreateRoomHook(echo.createRoom.bind(echo));
 	// optional: get DM room ID hook (needed for initiating DMs on matrix)
 	puppet.setGetDmRoomIdHook(echo.getDmRoomId.bind(echo));
 	// required: get description hook
