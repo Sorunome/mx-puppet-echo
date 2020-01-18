@@ -4,6 +4,8 @@
 This is a simple example implementation of [mx-puppet-bridge](https://github.com/Sorunome/mx-puppet-bridge).
 It is meant to give those who want to write their own protocol implementation a starting point.
 
+Once a DM room with a ghost is created the ghost will simply echo back everything written.
+
 ## Installation
 ```bash
 git pull https://github.com/Sorunome/mx-puppet-echo
