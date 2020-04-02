@@ -45,7 +45,7 @@ if (options.help) {
 }
 
 // here we define some information about our protocol, what features it supports etc.
-const protocol = {
+const protocol: IProtocolInformation = {
 	features: {
 		file: true, // we support receiving files
 		presence: true, // we support presence
@@ -53,7 +53,7 @@ const protocol = {
 	id: "echo", // an internal ID for the protocol, all lowercase
 	displayname: "Echo", // a human-readable name of the protocol
 	externalUrl: "https://github.com/Sorunome/mx-puppet-echo", // A URL about your protocol
-} as IProtocolInformation;
+};
 
 // next we create the puppet class.
 const puppet = new PuppetBridge(options["registration-file"], options.config, protocol);
@@ -61,13 +61,13 @@ const puppet = new PuppetBridge(options["registration-file"], options.config, pr
 // check if the options were to register
 if (options.register) {
 	// okay, all we have to do is generate a registration file
-	puppet.readConfig();
+	puppet.readConfig(false);
 	try {
 		puppet.generateRegistration({
 			prefix: "_echopuppet_",
 			id: "echo-puppet",
 			url: `http://${puppet.Config.bridge.bindAddress}:${puppet.Config.bridge.port}`,
-		} as IPuppetBridgeRegOpts);
+		});
 	} catch (err) {
 		// tslint:disable-next-line:no-console
 		console.log("Couldn't generate registration file:", err);
@@ -104,9 +104,9 @@ async function run() {
 	puppet.setGetDataFromStrHook(async (str: string): Promise<IRetData> => {
 		// this is called when someone tires to link a new puppet
 		// for us the str is our own name and if it is "invalid" it fails
-		const retData = {
+		const retData: IRetData = {
 			success: false,
-		} as IRetData;
+		};
 		if (!str || str === "invalid") {
 			retData.error = "Invalid name!";
 			return retData;

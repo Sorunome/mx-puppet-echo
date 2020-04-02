@@ -50,7 +50,7 @@ export class Echo {
 				// this is the name of the user
 				name: ghostname.toUpperCase(),
 			},
-		} as IReceiveParams;
+		};
 	}
 
 	public async newPuppet(puppetId: number, data: any) {
